@@ -1,0 +1,54 @@
+{% block content %}
+    <h1>Управление откликами</h1>
+
+    <form method="get" action="{% url 'manage_responses' %}">
+        <label for="post">Выберите объявление:</label>
+        <select name="post" id="post">
+            <option value="">Все объявления</option>
+            {% for post in posts %}
+                <option value="{{ post.id }}" {% if request.GET.post == post.id|stringformat:"s" %}selected{% endif %}>
+                    {{ post.title }}
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit">Фильтровать</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Объявление</th>
+                <th>Автор</th>
+                <th>Контент</th>
+                <th>Время</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for response in responses %}
+                <tr>
+                    <td>{{ response.post.title }}</td>
+                    <td>{{ response.author.username }}</td>
+                    <td>{{ response.content }}</td>
+                    <td>{{ response.response_time }}</td>
+                    <td>
+                        {% if not response.accepted %}
+                            <form method="post" action="{% url 'manage_responses' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="response_id" value="{{ response.id }}">
+                                <button type="submit" name="action" value="accept">Принять</button>
+                                <button type="submit" name="action" value="delete">Удалить</button>
+                            </form>
+                        {% else %}
+                            Принят
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">Нет откликов для отображения.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

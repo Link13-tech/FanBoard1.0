@@ -1,0 +1,9 @@
+{% block content %}
+    <h1>{% if form.instance.pk %}Edit{% else %}Create{% endif %} Post</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }}
+        {{ form.as_p }}
+        <input type="submit" value="Submit"/>
+    </form>
+{% endblock %}
