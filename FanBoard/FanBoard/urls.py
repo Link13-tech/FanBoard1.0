@@ -15,6 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from ckeditor_uploader.views import upload, browse
+from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.urls import path, include, re_path
@@ -33,3 +34,4 @@ urlpatterns = [
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

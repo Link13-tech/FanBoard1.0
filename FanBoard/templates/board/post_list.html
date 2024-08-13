@@ -1,3 +1,6 @@
+{% extends 'default.html' %}
+
+{% block content %}
 <h1>Posts</h1>
 <ul>
     {% for post in posts %}
@@ -5,3 +8,4 @@
     {% endfor %}
 </ul>
 <a href="{% url 'post_create' %}">Create a new post</a>
+{% endblock %}
