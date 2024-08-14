@@ -10823,4 +10823,39 @@ textarea.form-control-lg {
   .d-print-none {
     display: none !important;
   }
+  .card-img-top {
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+
+  .card-text {
+    font-size: 0.9rem;
+    color: #666;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+
+  .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+  }
+
+  .text-center {
+    text-align: center;
+
+  .mt-4 {
+    margin-top: 1.5rem; /* Отступ сверху для кнопок */
+  }
+  .btn {
+    display: inline-block;
+    margin: 0.5rem; /* Отступ между кнопками */
+  }
 }

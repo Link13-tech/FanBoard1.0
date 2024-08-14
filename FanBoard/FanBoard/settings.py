@@ -59,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'FanBoard.urls'
@@ -141,7 +142,7 @@ STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -181,8 +182,29 @@ CKEDITOR_RESTRICT_BY_USER = True
 
 CKEDITOR_CONFIGS = {
     'default': {
-        "removePlugins": "stylesheetparser",
-        'toolbar': 'full',
+        'toolbar': [
+            {},
+            {'name': 'insert', 'items': ['Image', 'Html5video', 'Table', 'HorizontalRule', 'SpecialChar', 'Iframe', 'Youtube',]},
+            {'name': 'styles', 'items': ['Styles', 'Format']},
+            {'name': 'basicstyles', 'items': ['Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat']},
+            {'name': 'paragraph', 'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote']},
+            {'name': 'links', 'items': ['Link', 'Unlink', 'Anchor']},
+            {'name': 'tools', 'items': ['Maximize', 'ShowBlocks']},
+
+        {
+                'name': 'myMenu',
+                'items': [
+                    'TextColor',
+                    'BGColor',
+                    'FontSize',
+                    'Font',
+                    'JustifyLeft',
+                    'JustifyCenter',
+                    'JustifyRight',
+                    'JustifyBlock'
+                ]
+        }
+        ],
         'extraPlugins': ','.join([
             'uploadimage',  # Поддержка загрузки изображений
             'image2',       # Улучшенная поддержка изображений
@@ -191,11 +213,20 @@ CKEDITOR_CONFIGS = {
             'clipboard',    # Работа с буфером обмена
             'dialog',       # Поддержка диалоговых окон
             'dialogui',     # Дополнительные диалоговые окна
-            'elementspath'  # Путь к элементам
+            'elementspath', # Путь к элементам
+            'youtube',      # Подключаем плагин для работы с YouTube
+            'html5video',
+
         ]),
-        'filebrowserUploadUrl': '/ckeditor/upload/',  # URL для загрузки файлов
-        'filebrowserBrowseUrl': '/ckeditor/browse/',  # URL для просмотра файлов
+        'filebrowserUploadUrl': '/upload/',
+        'filebrowserBrowseUrl': '/browse/',
         'allowedContent': True,
-        'extraAllowedContent': 'video[*]',  # Допуск для тегов видео
+        'extraAllowedContent': 'video[*]{*}[*] iframe[*]{*}[*]',
+        'height': 1000,  # Высота редактора в пикселях
+        'width': '100%',   # Ширина редактора в пикселях
     }
 }
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]

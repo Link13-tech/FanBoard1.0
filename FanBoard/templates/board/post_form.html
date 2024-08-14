@@ -1,11 +1,27 @@
 {% extends 'default.html' %}
-
+{% load i18n %}
 {% block content %}
-    <h1>{% if form.instance.pk %}Edit{% else %}Create{% endif %} Post</h1>
+    <h1>{% if form.instance.pk %}{% trans "Edit" %}{% else %}{% trans "Create" %}{% endif %} {% trans "Post" %}</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.media }}
-        {{ form.as_p }}
-        <input type="submit" value="Submit"/>
+
+        <div class="form-group">
+            <label for="{{ form.title.id_for_label }}">{% trans "Title" %}</label>
+            <input type="text" name="{{ form.title.name }}" id="{{ form.title.id_for_label }}" value="{{ form.title.value }}" class="form-control" style="width: 100%; height: 50px;" />
+        </div>
+
+        <!-- Отображаем другие поля формы вручную -->
+        <div class="form-group">
+            <label for="{{ form.content.id_for_label }}">{% trans "Content" %}</label>
+            {{ form.content|safe }} <!-- Используйте кастомный виджет, если нужно -->
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.category.id_for_label }}">{% trans "Category" %}</label>
+            {{ form.category }}
+        </div>
+
+        <input type="submit" value="{% trans 'Submit' %}" class="btn btn-primary mt-3"/>
     </form>
 {% endblock %}

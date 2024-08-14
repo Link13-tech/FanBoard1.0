@@ -1,27 +1,75 @@
+{% extends 'default.html' %}
+{% load i18n %}
 {% block content %}
-    <h1>Управление откликами</h1>
+    <h1>{% trans "Manage response" %}</h1>
 
-    <form method="get" action="{% url 'manage_responses' %}">
-        <label for="post">Выберите объявление:</label>
+    <!-- Добавлен класс для формы фильтрации -->
+    <form method="get" action="{% url 'manage_responses' %}" class="filter-form">
+        <label for="post">{% trans "Choose post" %}:</label>
         <select name="post" id="post">
-            <option value="">Все объявления</option>
+            <option value="">{% trans "All posts" %}</option>
             {% for post in posts %}
                 <option value="{{ post.id }}" {% if request.GET.post == post.id|stringformat:"s" %}selected{% endif %}>
                     {{ post.title }}
                 </option>
             {% endfor %}
         </select>
-        <button type="submit">Фильтровать</button>
+        <button type="submit">{% trans "Filter" %}</button>
     </form>
 
-    <table>
+    <style>
+        .responses-table {
+            width: 100%;
+            border-collapse: collapse; /* Убирает двойные границы между ячейками */
+        }
+        .responses-table thead th {
+            background-color: #f2f2f2;
+            padding: 8px;
+            position: sticky;
+            top: 0; /* Фиксирует заголовок при прокрутке */
+            border-bottom: 2px solid #ddd;
+        }
+        .responses-table td, .responses-table th {
+            padding: 8px;
+            text-align: left;
+            border: none; /* Убирает границы ячеек и заголовков */
+        }
+        .responses-table th:nth-child(1) {
+            width: 25%; /* Ширина для колонки "Объявление" */
+        }
+        .responses-table th:nth-child(2) {
+            width: 15%; /* Ширина для колонки "Автор" */
+        }
+        .responses-table th:nth-child(3) {
+            width: 30%; /* Ширина для колонки "Контент" */
+        }
+        .responses-table th:nth-child(4) {
+            width: 15%; /* Ширина для колонки "Время" */
+        }
+        .responses-table th:nth-child(5) {
+            width: 15%; /* Ширина для колонки "Действие" */
+        }
+        .responses-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .responses-table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Добавлен отступ снизу для формы */
+        .filter-form {
+            margin-bottom: 30px; /* Отступ снизу, можно изменить по вашему усмотрению */
+        }
+    </style>
+
+    <table class="responses-table">
         <thead>
             <tr>
-                <th>Объявление</th>
-                <th>Автор</th>
-                <th>Контент</th>
-                <th>Время</th>
-                <th>Действие</th>
+                <th>{% trans "Post" %}</th>
+                <th>{% trans "Author" %}</th>
+                <th>{% trans "Content" %}</th>
+                <th>{% trans "Time" %}</th>
+                <th>{% trans "Action" %}</th>
             </tr>
         </thead>
         <tbody>
@@ -36,17 +84,17 @@
                             <form method="post" action="{% url 'manage_responses' %}">
                                 {% csrf_token %}
                                 <input type="hidden" name="response_id" value="{{ response.id }}">
-                                <button type="submit" name="action" value="accept">Принять</button>
-                                <button type="submit" name="action" value="delete">Удалить</button>
+                                <button type="submit" name="action" value="accept">{% trans "Accept" %}</button>
+                                <button type="submit" name="action" value="delete">{% trans "Delete" %}</button>
                             </form>
                         {% else %}
-                            Принят
+                            {% trans "Accepted" %}
                         {% endif %}
                     </td>
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="5">Нет откликов для отображения.</td>
+                    <td colspan="5">{% trans "No response" %}</td>
                 </tr>
             {% endfor %}
         </tbody>

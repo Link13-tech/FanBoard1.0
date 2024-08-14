@@ -28,6 +28,10 @@ class PostListView(ListView):
         context = super().get_context_data(**kwargs)
         context['categories'] = Post.CATEGORY_CHOICES
         context['selected_category'] = self.request.GET.get('category', '')
+        for post in context['posts']:
+            post.first_image = post.get_first_image()
+            post.first_video = post.get_first_video()
+            post.content_excerpt = post.get_content_excerpt()
         return context
 
 
@@ -46,6 +50,14 @@ class PostDetailView(DetailView):
 
             response_text = request.POST.get('response')
 
+            # Создаем отклик
+            Response.objects.create(
+                post=post,
+                author=request.user,
+                content=response_text
+            )
+
+            # Отправляем уведомление
             send_mail(
                 'Новый отзыв на твой пост',
                 f'Ты получил новый отзыв: {response_text}',
@@ -53,7 +65,7 @@ class PostDetailView(DetailView):
                 [post.author.email],
                 fail_silently=False,
             )
-            messages.success(request, 'Твой отзыв отправлен.')
+            messages.success(request, 'Ваш отзыв был отправлен.')
             return redirect('post_detail', pk=post.pk)
         else:
             return redirect(f'/accounts/login/?next={request.path}')

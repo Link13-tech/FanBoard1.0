@@ -1,6 +1,9 @@
+import re
+
 from django.conf import settings
 from django.db import models
 from ckeditor.fields import RichTextField
+from django.utils.safestring import mark_safe
 
 
 class Post(models.Model):
@@ -25,6 +28,26 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_media(self):
+        content = mark_safe(self.content)
+        images = re.findall(r'<img[^>]+src="([^"]+)"', content)
+        videos = re.findall(r'<video[^>]*src="([^"]+)"', content)
+        return images, videos
+
+    def get_first_image(self):
+        images, _ = self.get_media()
+        return images[0] if images else None
+
+    def get_first_video(self):
+        _, videos = self.get_media()
+        return videos[0] if videos else None
+
+    def get_content_excerpt(self):
+        content = mark_safe(self.content)
+        if self.get_first_image():
+            return content[15000:]  # Оставить содержимое после первого изображения
+        return content
 
 
 class Response(models.Model):

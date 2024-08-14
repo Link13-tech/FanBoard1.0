@@ -1,11 +1,96 @@
 {% extends 'default.html' %}
-
+{% load i18n %}
+{% load static %}
 {% block content %}
-<h1>Posts</h1>
-<ul>
-    {% for post in posts %}
-        <li>{{ post.title }} - {{ post.author }}</li>
-    {% endfor %}
-</ul>
-<a href="{% url 'post_create' %}">Create a new post</a>
+<style>
+    .fixed-card {
+        height: 400px; /* Фиксированная высота карточки */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .fixed-card img, .fixed-card video {
+        width: 100%; /* Ширина изображения равна ширине карточки */
+        height: 200px; /* Фиксированная высота изображения */
+        object-fit: cover; /* Обрезка изображения с сохранением пропорций */
+        margin-bottom: 10px; /* Отступ снизу, чтобы не перекрывать текст */
+    }
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        overflow: hidden;
+        position: relative; /* Для позиционирования кнопки внутри карточки */
+    }
+    .card-title {
+        font-size: 1.25rem; /* Размер шрифта заголовка */
+        margin-bottom: 10px; /* Отступ снизу заголовка */
+        font-weight: bold; /* Полужирный шрифт заголовка */
+    }
+    .card-text {
+        font-size: 0.825rem; /* Размер шрифта текста */
+        flex: 1;
+        overflow: hidden;
+    }
+    .card {
+        background-color: rgba(255, 255, 255, 0.2); /* Полупрозрачный белый фон */
+        border: 1px solid #ddd; /* Граница карточки */
+        border-radius: 4px; /* Скругленные углы */
+    }
+    .btn-container {
+        margin-top: auto; /* Перемещает кнопку к нижней части карточки */
+        position: sticky; /* Делает контейнер кнопок и автора фиксированным внизу карточки */
+        bottom: 0; /* Располагает внизу */
+        z-index: 10; /* Устанавливает z-index для обеспечения видимости поверх остального контента */
+        padding: 10px 0; /* Отступы сверху и снизу для кнопок */
+    }
+    .card-img-top {
+        position: relative; /* Для правильного позиционирования картинки внутри карточки */
+    }
+    .text-black {
+        color: #000000; /* Полностью черный цвет */
+    }
+</style>
+
+<h1 class="text-center my-4">{% trans "Posts" %}</h1>
+<div class="container">
+    <div class="row">
+        {% for post in posts %}
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm fixed-card">
+                <div class="card-body">
+                    <!-- Печать заголовка поста -->
+                    <h5 class="card-title">{{ post.title }}</h5>
+
+                    <!-- Извлечение первого медиафайла (изображение или видео) -->
+                    {% if post.first_video %}
+                        <div class="card-img-top">
+                            <video controls>
+                                <source src="{{ post.first_video }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    {% elif post.first_image %}
+                        <div class="card-img-top">
+                            <img src="{{ post.first_image }}" alt="Image">
+                        </div>
+                    {% endif %}
+
+                    <!-- Остальная часть контента -->
+                    <div class="card-text">
+                        {{ post.content_excerpt|safe|truncatechars:200 }}
+                    </div>
+
+                    <!-- Информация об авторе и кнопка "Read More" -->
+                    <div class="d-flex justify-content-between align-items-center btn-container">
+                        <small class="text-black">{% trans "By" %} {{ post.author }}</small>
+                        <a href="{% url 'post_detail' post.id %}" class="btn btn-primary btn-sm">{% trans "Read More" %}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<a href="{% url 'post_create' %}" class="btn btn-success mt-4">{% trans "Create a new post" %}</a>
 {% endblock %}

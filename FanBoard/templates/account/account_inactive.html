@@ -3,15 +3,15 @@
 {% extends 'default.html' %}
 {% load i18n %}
 
-{% block head_title %}Активация аккаунта{% endblock %}
+{% block head_title %}{% trans "Accaunt activation" %}{% endblock %}
 
 {% block content %}
-    <h1>Введите код активации</h1>
+    <h1>{% trans "Input activation code" %}</h1>
     <form action="{% url 'confirm_user' %}" method="post">
         {% csrf_token %}
         <label>
-            <input class="text" type="text" name="code" placeholder="Введите код активации">
+            <input class="text" type="text" name="code" placeholder="{% trans 'Input activation code' %}">
         </label>
-        <input type="submit" value="Подтвердить">
+        <input type="submit" value="{% trans 'Confirm' %}">
     </form>
 {% endblock %}

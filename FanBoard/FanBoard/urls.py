@@ -30,8 +30,10 @@ urlpatterns = [
     path('', include('board.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     re_path(r'^upload/', login_required(upload), name='ckeditor_upload'),
-    re_path(r'^browse/', login_required(never_cache(browse)), name='ckeditor_browse')
+    re_path(r'^browse/', login_required(never_cache(browse)), name='ckeditor_browse'),
+    path('i18n/', include('django.conf.urls.i18n')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
