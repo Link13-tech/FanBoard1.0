@@ -1,6 +1,7 @@
 
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
@@ -43,21 +44,18 @@ class PostDetailView(DetailView):
     def post(self, request, *args, **kwargs):
         post = self.get_object()
         if request.user.is_authenticated:
-            # Проверяем, что пользователь не оставляет отзыв на собственный пост
             if request.user == post.author:
                 messages.error(request, 'Вы не можете оставить отзыв на свой собственный пост.')
                 return redirect('post_detail', pk=post.pk)
 
             response_text = request.POST.get('response')
 
-            # Создаем отклик
             Response.objects.create(
                 post=post,
                 author=request.user,
                 content=response_text
             )
 
-            # Отправляем уведомление
             send_mail(
                 'Новый отзыв на твой пост',
                 f'Ты получил новый отзыв: {response_text}',
@@ -117,7 +115,6 @@ class ManageResponsesView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Добавляем список объявлений в контекст
         context['posts'] = Post.objects.filter(author=self.request.user)
         return context
 
@@ -157,3 +154,12 @@ class ManageResponsesView(LoginRequiredMixin, ListView):
             [user.email],
             fail_silently=False,
         )
+
+
+@login_required
+def subscribe_category(request, category_name):
+    if category_name in request.user.get_subscribe():
+        request.user.remove_subscription(category_name)
+    else:
+        request.user.add_subscription(category_name)
+    return redirect(request.META.get('HTTP_REFERER', 'post_list'))

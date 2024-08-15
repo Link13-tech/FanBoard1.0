@@ -2,7 +2,17 @@
 {% load i18n %}
 {% block content %}
 <h2>{% trans "User page" %} {{ request.user.username }}</h2>
+
 <div>Здесь может содержаться персональная информация для каждого пользователя</div>
+
+<h5>{% trans "Your Subscriptions:" %}</h5>
+<ul>
+    {% for category in user.get_subscribe %}
+    <li>{{ category }}</li>
+    {% empty %}
+    <li>{% trans "You are not subscribed to any categories." %}</li>
+    {% endfor %}
+</ul>
 
 <!-- Ссылка на страницу manage_responses.html -->
 <a href="{% url 'manage_responses' %}" class="btn btn-primary">{% trans "Go to manage response" %}</a>
@@ -11,5 +21,4 @@
 <button class="btn btn-secondary">
     <a href="{% url 'account_logout' %}?next=/" class="text-white">{% trans "Logout" %}</a>
 </button>
-
 {% endblock %}

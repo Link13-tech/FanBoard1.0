@@ -3,7 +3,7 @@
 {% block content %}
     <h1>{% trans "Manage response" %}</h1>
 
-    <!-- Добавлен класс для формы фильтрации -->
+    <!-- формы фильтрации -->
     <form method="get" action="{% url 'manage_responses' %}" class="filter-form">
         <label for="post">{% trans "Choose post" %}:</label>
         <select name="post" id="post">
@@ -20,7 +20,7 @@
     <style>
         .responses-table {
             width: 100%;
-            border-collapse: collapse; /* Убирает двойные границы между ячейками */
+            border-collapse: collapse; /*двойные границы между ячейками */
         }
         .responses-table thead th {
             background-color: #f2f2f2;

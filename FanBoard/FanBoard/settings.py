@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'ckeditor',
     'ckeditor_uploader',
+    'django_apscheduler',
 ]
 
 SITE_ID = 1
@@ -183,15 +184,13 @@ CKEDITOR_RESTRICT_BY_USER = True
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': [
-            {},
             {'name': 'insert', 'items': ['Image', 'Html5video', 'Table', 'HorizontalRule', 'SpecialChar', 'Iframe', 'Youtube',]},
             {'name': 'styles', 'items': ['Styles', 'Format']},
             {'name': 'basicstyles', 'items': ['Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat']},
             {'name': 'paragraph', 'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote']},
             {'name': 'links', 'items': ['Link', 'Unlink', 'Anchor']},
             {'name': 'tools', 'items': ['Maximize', 'ShowBlocks']},
-
-        {
+            {
                 'name': 'myMenu',
                 'items': [
                     'TextColor',
@@ -203,18 +202,17 @@ CKEDITOR_CONFIGS = {
                     'JustifyRight',
                     'JustifyBlock'
                 ]
-        }
+            }
         ],
         'extraPlugins': ','.join([
-            'uploadimage',  # Поддержка загрузки изображений
-            'image2',       # Улучшенная поддержка изображений
-            'widget',       # Поддержка виджетов
-            'lineutils',    # Полезные утилиты для работы с текстом
-            'clipboard',    # Работа с буфером обмена
-            'dialog',       # Поддержка диалоговых окон
-            'dialogui',     # Дополнительные диалоговые окна
-            'elementspath', # Путь к элементам
-            'youtube',      # Подключаем плагин для работы с YouTube
+            'uploadimage',
+            'image2',
+            'widget',
+            'lineutils',
+            'dialog',
+            'dialogui',
+            'elementspath',
+            'youtube',
             'html5video',
 
         ]),
@@ -222,11 +220,15 @@ CKEDITOR_CONFIGS = {
         'filebrowserBrowseUrl': '/browse/',
         'allowedContent': True,
         'extraAllowedContent': 'video[*]{*}[*] iframe[*]{*}[*]',
-        'height': 1000,  # Высота редактора в пикселях
-        'width': '100%',   # Ширина редактора в пикселях
+        'height': 1000,
+        'width': '100%',
     }
 }
 
 LOCALE_PATHS = [
     BASE_DIR / 'locale',
 ]
+
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+
+APSCHEDULER_RUN_NOW_TIMEOUT = 25

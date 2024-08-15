@@ -1,6 +1,43 @@
 {% extends 'default.html' %}
 {% load i18n %}
 {% load static %}
+
+{% block navbar %}
+    {% if user.is_authenticated %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {% trans "Categories" %}
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+            {% for category in categories %}
+            <li>
+                <div class="d-flex align-items-center justify-content-between">
+                    <!-- Ссылка для фильтрации по категории -->
+                    <a class="dropdown-item flex-grow-1" href="{% url 'post_list' %}?category={{ category.0 }}">
+                        {{ category.1 }}
+                    </a>
+                    <!-- Форма для подписки/отписки -->
+                    <form method="post" action="{% url 'subscribe_category' category.0 %}" class="ms-2">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-link p-0">
+                            {% if category.0 in user.get_subscribe %}
+                                <!-- Иконка для отписки -->
+                                <i class="fa fa-times-circle text-danger category-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="{% trans "Unsubscribe" %}"></i>
+                            {% else %}
+                                <!-- Иконка колокольчика для подписки -->
+                                <i class="fa fa-bell category-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="{% trans "Subscribe" %}"></i>
+                            {% endif %}
+                        </button>
+                    </form>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% endif %}
+{% endblock %}
+
+
 {% block content %}
 <style>
     .fixed-card {
@@ -50,6 +87,17 @@
     .text-black {
         color: #000000; /* Полностью черный цвет */
     }
+    .dropdown-menu .btn-link {
+        padding: 0; /* Убираем отступы у кнопки */
+    }
+    .dropdown-menu .category-icon {
+        margin-right: 10px; /* Отступ между текстом и иконкой */
+    }
+    .dropdown-menu .dropdown-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
 </style>
 
 <h1 class="text-center my-4">{% trans "Posts" %}</h1>
@@ -59,7 +107,6 @@
         <div class="col-md-4">
             <div class="card mb-4 shadow-sm fixed-card">
                 <div class="card-body">
-                    <!-- Печать заголовка поста -->
                     <h5 class="card-title">{{ post.title }}</h5>
 
                     <!-- Извлечение первого медиафайла (изображение или видео) -->
@@ -92,5 +139,4 @@
         {% endfor %}
     </div>
 </div>
-<a href="{% url 'post_create' %}" class="btn btn-success mt-4">{% trans "Create a new post" %}</a>
 {% endblock %}

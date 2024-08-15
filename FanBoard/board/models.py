@@ -3,6 +3,7 @@ import re
 from django.conf import settings
 from django.db import models
 from ckeditor.fields import RichTextField
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 
@@ -46,8 +47,11 @@ class Post(models.Model):
     def get_content_excerpt(self):
         content = mark_safe(self.content)
         if self.get_first_image():
-            return content[15000:]  # Оставить содержимое после первого изображения
+            return content[15000:]
         return content
+
+    def get_absolute_url(self):
+        return reverse('post_detail', kwargs={'pk': self.pk})
 
 
 class Response(models.Model):

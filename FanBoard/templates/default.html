@@ -11,7 +11,7 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     {% load static %}
     <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
         body {
             background-image: url("{% static 'image/background.jpg' %}"); /* Путь к вашему изображению */
@@ -48,7 +48,13 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="#">{% trans "About" %}</a></li>
+                    {% if user.is_authenticated %}
+                    <!-- Добавляем кнопку "Create New Post" только для авторизованных пользователей -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'post_create' %}">{% trans "Create New Post" %}</a>
+                    </li>
+                    {% endif %}
+                    {% block navbar %}{% endblock %}
                 </ul>
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     {% if user.is_authenticated %}
@@ -94,5 +100,13 @@
 
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltips = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltips.map(function (tooltipEl) {
+                return new bootstrap.Tooltip(tooltipEl);
+            });
+        });
+    </script>
 </body>
 </html>

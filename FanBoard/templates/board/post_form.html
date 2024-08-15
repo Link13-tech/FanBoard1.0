@@ -10,11 +10,9 @@
             <label for="{{ form.title.id_for_label }}">{% trans "Title" %}</label>
             <input type="text" name="{{ form.title.name }}" id="{{ form.title.id_for_label }}" value="{{ form.title.value }}" class="form-control" style="width: 100%; height: 50px;" />
         </div>
-
-        <!-- Отображаем другие поля формы вручную -->
         <div class="form-group">
             <label for="{{ form.content.id_for_label }}">{% trans "Content" %}</label>
-            {{ form.content|safe }} <!-- Используйте кастомный виджет, если нужно -->
+            {{ form.content|safe }}
         </div>
 
         <div class="form-group">
