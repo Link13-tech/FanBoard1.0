@@ -184,7 +184,7 @@ CKEDITOR_RESTRICT_BY_USER = True
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': [
-            {'name': 'insert', 'items': ['Image', 'Html5video', 'Table', 'HorizontalRule', 'SpecialChar', 'Iframe', 'Youtube',]},
+            {'name': 'insert', 'items': ['Image', 'Html5video', 'Table', 'HorizontalRule', 'SpecialChar', 'Youtube',]},
             {'name': 'styles', 'items': ['Styles', 'Format']},
             {'name': 'basicstyles', 'items': ['Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat']},
             {'name': 'paragraph', 'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote']},

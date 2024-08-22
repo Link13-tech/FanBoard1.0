@@ -63,11 +63,19 @@
         font-size: 1.25rem; /* Размер шрифта заголовка */
         margin-bottom: 10px; /* Отступ снизу заголовка */
         font-weight: bold; /* Полужирный шрифт заголовка */
+        overflow: hidden; /* Прячем переполненный текст */
+        text-overflow: ellipsis; /* Отображаем многоточие при переполнении */
+        display: -webkit-box; /* Используем flexbox для обрезки */
+        -webkit-line-clamp: 3; /* Ограничиваем количество строк до 3 */
+        -webkit-box-orient: vertical; /* Вертикальное направление для обрезки */
+        white-space: normal; /* Разрешаем перенос строки */
+        height: 80px;
     }
     .card-text {
         font-size: 0.825rem; /* Размер шрифта текста */
         flex: 1;
         overflow: hidden;
+        text-overflow: ellipsis; /* Отображаем многоточие при переполнении */
     }
     .card {
         background-color: rgba(255, 255, 255, 0.2); /* Полупрозрачный белый фон */

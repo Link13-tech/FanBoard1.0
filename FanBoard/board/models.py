@@ -48,6 +48,8 @@ class Post(models.Model):
         content = mark_safe(self.content)
         if self.get_first_image():
             return content[15000:]
+        elif self.get_first_video():
+            return content[15000:]
         return content
 
     def get_absolute_url(self):
